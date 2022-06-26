@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Typography } from "@mui/material";
 import $ from "jquery";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -45,6 +45,27 @@ function TravelDetails() {
     "Duration",
   ];
   const { state } = useLocation();
+  const [data, setData] = useState(state);
+  const DataTable = (data1) => {
+    setData(data1);
+  };
+
+  const handleData = (e) => {
+    let data1 = [];
+    state.map((item) => {
+      if (e.target.value === item.to_point_name) {
+        data1.push(item);
+      }
+      if (e.target.value === "") {
+        data1 = state;
+      }
+    });
+    DataTable(data1);
+  };
+
+  //   useEffect(() => {
+  //     DataTable();
+  //   }, [data]);
 
   return (
     <React.Fragment>
@@ -53,21 +74,36 @@ function TravelDetails() {
         <Box sx={{ display: "flex", justifyContent: "end", margin: "30px" }}>
           <Box sx={{ width: "850px" }}>
             <Box style={{ height: 400, width: "100%" }}>
-              <Typography variant="h2"> Top 8 modes to Travel</Typography>
-              {state?.length && (
-                <TableContainer component={Paper}>
-                  <Table sx={{ minWidth: 700 }} aria-label="customized table">
-                    <TableHead>
-                      <TableRow>
-                        {columns.map((item, i) => (
-                          <StyledTableCell key={i} sx={{ fontSize: "10px" }}>
-                            {item}
-                          </StyledTableCell>
-                        ))}
-                      </TableRow>
-                    </TableHead>
+              <Stack
+                direction="row"
+                spacing={2}
+                alignItems="center"
+                justifyContent="space-around"
+                sx={{ my: 2 }}
+              >
+                <Typography variant="h2"> Top 5 modes to Travel</Typography>
+                <TextField
+                  id="filled-basic"
+                  label="Search Desitination"
+                  variant="outlined"
+                  onChange={(e) => handleData(e)}
+                />
+              </Stack>
+
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 700 }} aria-label="customized table">
+                  <TableHead>
+                    <TableRow>
+                      {columns.map((item, i) => (
+                        <StyledTableCell key={i} sx={{ fontSize: "10px" }}>
+                          {item}
+                        </StyledTableCell>
+                      ))}
+                    </TableRow>
+                  </TableHead>
+                  {data?.length ? (
                     <TableBody>
-                      {state?.slice(1, 8).map((row, key) => (
+                      {data?.slice(0, 6).map((row, key) => (
                         <StyledTableRow key={key}>
                           <StyledTableCell component="th" scope="row">
                             {row.mode}
@@ -96,9 +132,13 @@ function TravelDetails() {
                         </StyledTableRow>
                       ))}
                     </TableBody>
-                  </Table>
-                </TableContainer>
-              )}
+                  ) : (
+                    <TableBody>
+                      <StyledTableRow>No Data Found</StyledTableRow>
+                    </TableBody>
+                  )}
+                </Table>
+              </TableContainer>
             </Box>
           </Box>
         </Box>
