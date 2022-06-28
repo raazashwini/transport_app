@@ -19,7 +19,7 @@ const pages = [
   { name: "Favorites", value: "#" },
   { name: "Travel", value: "/travel" },
 ];
-const settings = ["Profile", "Account", "Logout"];
+const settings = [ { name: "Reset Password", value: "/reset" },{ name: "Account", value: "/account" }, { name: "Logout", value: "/" }];
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -95,9 +95,9 @@ export default function Navbar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={()=>{navigate(setting.value)}}>
                   <Typography textAlign="center" sx={{ fontSize: "15px" }}>
-                    {setting}
+                    {setting.name}
                   </Typography>
                 </MenuItem>
               ))}

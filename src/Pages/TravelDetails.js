@@ -49,24 +49,59 @@ function TravelDetails() {
   const DataTable = (data1) => {
     setData(data1);
   };
-
+const [search,setSearch] = useState({
+  from:'',
+  to:''
+})
   const handleData = (e) => {
-    let data1 = [];
-    state.map((item) => {
-      if (e.target.value === item.to_point_name) {
-        data1.push(item);
-      }
-      if (e.target.value === "") {
-        data1 = state;
-      }
-    });
-    DataTable(data1);
+   
+    const nam = e.target.name;
+    const val = e.target.value;
+    setSearch({...search,[nam]:val})
+
   };
+  // console.log(search)
+  // console.log(state)
 
-  //   useEffect(() => {
-  //     DataTable();
-  //   }, [data]);
+  // const handleData1 = (e) => {
+  //   let data1 = [];
+  //   state.map((item) => {
+  //     if (e.target.value === item.from_point_name) {
+  //       data1.push(item);
+  //     }
+  //     else if (e.target.value === "") {
+  //       data1 = state;
+  //     }
+  //   });
+  //   DataTable(data1);
+  // };
 
+ const handleSubmit = () => {
+  let data1 = [];
+  // console.log(search)
+  state.map((item) => {
+    if ( (item.from_point_name === search.from) ||(item.to_point_name === search.to)) {
+      data1.push(item);
+    }
+    if ((search.from === "") && (search.to === item.to_point_name)) {
+      data1.push(item);
+    }
+    if ((search.from === item.from_point_name) && (search.to ==="")) {
+      data1.push(item);
+    }
+    if ((search.from === "") && (search.to ==="")) {
+      data1 = state
+    }
+  });
+  setData(data1);
+ }
+
+
+//  console.log(data)
+//  useEffect(()=>{
+//   DataTable()
+//  },[])
+console.log(data)
   return (
     <React.Fragment>
       <Box className="bg-continer">
@@ -81,13 +116,27 @@ function TravelDetails() {
                 justifyContent="space-around"
                 sx={{ my: 2 }}
               >
-                <Typography variant="h2"> Top 5 modes to Travel</Typography>
                 <TextField
                   id="filled-basic"
-                  label="Search Desitination"
-                  variant="outlined"
+                  label="Starting"
+                  variant="filled"
+                  size="small"
+                  name="from"
+                  sx={{fontSize:'20px',background:'#fff'}}
                   onChange={(e) => handleData(e)}
                 />
+                <TextField
+                  id="filled-basic"
+                  label="Desitination"
+                  name="to"
+                  variant="filled"
+                  size="small"
+                  sx={{fontSize:'20px',background:'#fff'}}
+                  onChange={(e) => handleData(e)}
+                />
+                <Button variant="contained" onClick = {() => handleSubmit()}>
+                  Search
+                </Button>
               </Stack>
 
               <TableContainer component={Paper}>
@@ -112,13 +161,14 @@ function TravelDetails() {
                             {row.from_point_name}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            {row.arrival_time}
+                            
+                            {row.departure_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.to_point_name}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            {row.departure_time}
+                          {row.arrival_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.distance}
