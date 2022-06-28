@@ -1,4 +1,4 @@
-import { Box, Button, Stack, TextField, Typography } from "@mui/material";
+import { Box, Button, Stack, TextField, Checkbox } from "@mui/material";
 import $ from "jquery";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -7,6 +7,9 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+
 import Paper from "@mui/material/Paper";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useEffect, useState } from "react";
@@ -34,6 +37,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 function TravelDetails() {
+  const [selected, setSelected] = useState([]);
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const columns = [
     "Mode",
     "Starting Location",
@@ -43,22 +48,21 @@ function TravelDetails() {
     "Distance",
     "Distance Desc",
     "Duration",
+    "favorite",
   ];
   const { state } = useLocation();
   const [data, setData] = useState(state);
   const DataTable = (data1) => {
     setData(data1);
   };
-const [search,setSearch] = useState({
-  from:'',
-  to:''
-})
+  const [search, setSearch] = useState({
+    from: "",
+    to: "",
+  });
   const handleData = (e) => {
-   
     const nam = e.target.name;
     const val = e.target.value;
-    setSearch({...search,[nam]:val})
-
+    setSearch({ ...search, [nam]: val });
   };
   // console.log(search)
   // console.log(state)
@@ -76,32 +80,38 @@ const [search,setSearch] = useState({
   //   DataTable(data1);
   // };
 
- const handleSubmit = () => {
-  let data1 = [];
-  // console.log(search)
-  state.map((item) => {
-    if ( (item.from_point_name === search.from) ||(item.to_point_name === search.to)) {
-      data1.push(item);
+  const handleSubmit = () => {
+    let data1 = [];
+    // console.log(search)
+    state.map((item) => {
+      if (
+        item.from_point_name === search.from ||
+        item.to_point_name === search.to
+      ) {
+        data1.push(item);
+      }
+      if (search.from === "" && search.to === item.to_point_name) {
+        data1.push(item);
+      }
+      if (search.from === item.from_point_name && search.to === "") {
+        data1.push(item);
+      }
+      if (search.from === "" && search.to === "") {
+        data1 = state;
+      }
+    });
+    setData(data1);
+  };
+  const handleClick = (event, id) => {
+    console.log(id);
+    if (event.target.checked) {
+      setSelected([...selected, id]);
+    } else {
+      const data = selected.filter((selectedId) => selectedId !== id);
+      setSelected(data);
     }
-    if ((search.from === "") && (search.to === item.to_point_name)) {
-      data1.push(item);
-    }
-    if ((search.from === item.from_point_name) && (search.to ==="")) {
-      data1.push(item);
-    }
-    if ((search.from === "") && (search.to ==="")) {
-      data1 = state
-    }
-  });
-  setData(data1);
- }
+  };
 
-
-//  console.log(data)
-//  useEffect(()=>{
-//   DataTable()
-//  },[])
-console.log(data)
   return (
     <React.Fragment>
       <Box className="bg-continer">
@@ -122,7 +132,7 @@ console.log(data)
                   variant="filled"
                   size="small"
                   name="from"
-                  sx={{fontSize:'20px',background:'#fff'}}
+                  sx={{ fontSize: "20px", background: "#fff" }}
                   onChange={(e) => handleData(e)}
                 />
                 <TextField
@@ -131,10 +141,10 @@ console.log(data)
                   name="to"
                   variant="filled"
                   size="small"
-                  sx={{fontSize:'20px',background:'#fff'}}
+                  sx={{ fontSize: "20px", background: "#fff" }}
                   onChange={(e) => handleData(e)}
                 />
-                <Button variant="contained" onClick = {() => handleSubmit()}>
+                <Button variant="contained" onClick={() => handleSubmit()}>
                   Search
                 </Button>
               </Stack>
@@ -161,14 +171,13 @@ console.log(data)
                             {row.from_point_name}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            
                             {row.departure_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.to_point_name}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                          {row.arrival_time}
+                            {row.arrival_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.distance}
@@ -178,6 +187,14 @@ console.log(data)
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.duration}
+                          </StyledTableCell>
+                          <StyledTableCell align="right">
+                            <Checkbox
+                              {...label}
+                              icon={<FavoriteBorder />}
+                              checkedIcon={<Favorite />}
+                              onClick={(e) => handleClick(e, row)}
+                            />
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
