@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 const pages = [
   { name: "Home", value: "/homepage" },
   { name: "About Us", value: "/about" },
-  { name: "Favorites", value: "#" },
+  { name: "Favorites", value: "/fav" },
   { name: "Travel", value: "/travel" },
 ];
 const settings = [ { name: "Reset Password", value: "/reset" },{ name: "Account", value: "/account" }, { name: "Logout", value: "/" }];

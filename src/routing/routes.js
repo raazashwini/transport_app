@@ -11,6 +11,7 @@ import About from "../Pages/About";
 import Reset from '../Pages/Reset';
 import Account from '../Pages/Account';
 import TravelDetails from "../Pages/TravelDetails";
+import Favoutite from "../Pages/favoutite";
 
 const Routing = () => {
   return (
@@ -23,6 +24,7 @@ const Routing = () => {
         <Route path="/about" element={<About />} />
         <Route path="/reset" element={<Reset />} />
         <Route path="/account" element={<Account />} />
+        <Route path="/fav" element={<Favoutite />} />
         <Route path="/travel/travel-details" element={<TravelDetails />} />
       </Routes>
       {/* <Footer/> */}

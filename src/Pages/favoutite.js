@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import ApiService from '../services/ApiService';
-import {saveFav} from '../services/ApiEndpoints'
+import {getfav} from '../services/ApiEndpoints'
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
@@ -37,14 +37,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function TravelDetails() {
+function Favoutite() {
   const { apiService } = ApiService();
   const [selected, setSelected] = useState([]);
-  console.log(selected)
   const getLogin = () => {
-    apiService({ url: saveFav, method: "post", data: selected }).then(
+    apiService({ url: getfav, method: "get" }).then(
       (result) => {
-        console.log(result)       
+       setSelected(result)    
+       console.log(result)   
       }
     )
     .catch((error) => alert('login fails: user does not exist') )
@@ -59,69 +59,12 @@ function TravelDetails() {
     "Distance",
     "Distance Desc",
     "Duration",
-    "favorite",
   ];
-  const { state } = useLocation();
-  const [data, setData] = useState(state);
-  const DataTable = (data1) => {
-    setData(data1);
-  };
-  const [search, setSearch] = useState({
-    from: "",
-    to: "",
-  });
-  const handleData = (e) => {
-    const nam = e.target.name;
-    const val = e.target.value;
-    setSearch({ ...search, [nam]: val });
-  };
-  // console.log(search)
-  // console.log(state)
 
-  // const handleData1 = (e) => {
-  //   let data1 = [];
-  //   state.map((item) => {
-  //     if (e.target.value === item.from_point_name) {
-  //       data1.push(item);
-  //     }
-  //     else if (e.target.value === "") {
-  //       data1 = state;
-  //     }
-  //   });
-  //   DataTable(data1);
-  // };
+useEffect(()=>{
+    getLogin()
+},[])
 
-  const handleSubmit = () => {
-    let data1 = [];
-    // console.log(search)
-    state.map((item) => {
-      if (
-        item.from_point_name === search.from ||
-        item.to_point_name === search.to
-      ) {
-        data1.push(item);
-      }
-      if (search.from === "" && search.to === item.to_point_name) {
-        data1.push(item);
-      }
-      if (search.from === item.from_point_name && search.to === "") {
-        data1.push(item);
-      }
-      if (search.from === "" && search.to === "") {
-        data1 = state;
-      }
-    });
-    setData(data1);
-  };
-  const handleClick = (event, id) => {
-    console.log(id);
-    if (event.target.checked) {
-      setSelected([...selected, id]);
-    } else {
-      const data = selected.filter((selectedId) => selectedId !== id);
-      setSelected(data);
-    }
-  };
 
   return (
     <React.Fragment>
@@ -129,36 +72,7 @@ function TravelDetails() {
         <Navbar />
         <Box sx={{ display: "flex", justifyContent: "end", margin: "30px" }}>
           <Box sx={{ width: "850px" }}>
-            <Box style={{ height: 400, width: "100%" }}>
-              <Stack
-                direction="row"
-                spacing={2}
-                alignItems="center"
-                justifyContent="space-around"
-                sx={{ my: 2 }}
-              >
-                <TextField
-                  id="filled-basic"
-                  label="Starting"
-                  variant="filled"
-                  size="small"
-                  name="from"
-                  sx={{ fontSize: "20px", background: "#fff" }}
-                  onChange={(e) => handleData(e)}
-                />
-                <TextField
-                  id="filled-basic"
-                  label="Desitination"
-                  name="to"
-                  variant="filled"
-                  size="small"
-                  sx={{ fontSize: "20px", background: "#fff" }}
-                  onChange={(e) => handleData(e)}
-                />
-                <Button variant="contained" onClick={() => handleSubmit()}>
-                  Search
-                </Button>
-              </Stack>
+            
 
               <TableContainer component={Paper}>
                 <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -171,9 +85,9 @@ function TravelDetails() {
                       ))}
                     </TableRow>
                   </TableHead>
-                  {data?.length ? (
+                  {selected?.length ? (
                     <TableBody>
-                      {data?.slice(0, 6).map((row, key) => (
+                      {selected?.map((row, key) => (
                         <StyledTableRow key={key}>
                           <StyledTableCell component="th" scope="row">
                             {row.mode}
@@ -199,14 +113,7 @@ function TravelDetails() {
                           <StyledTableCell align="right">
                             {row.duration}
                           </StyledTableCell>
-                          <StyledTableCell align="right">
-                            <Checkbox
-                              {...label}
-                              icon={<FavoriteBorder />}
-                              checkedIcon={<Favorite />}
-                              onClick={(e) => {handleClick(e, row);getLogin()}}
-                            />
-                          </StyledTableCell>
+                          
                         </StyledTableRow>
                       ))}
                     </TableBody>
@@ -220,9 +127,8 @@ function TravelDetails() {
             </Box>
           </Box>
         </Box>
-      </Box>
     </React.Fragment>
   );
 }
 
-export default TravelDetails;
+export default Favoutite;
