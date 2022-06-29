@@ -13,10 +13,10 @@ export default function Account() {
   const [updateprofile , setUpdateProfile] = useState({
     email:"",
     username:'',
-    curEmail:data.email
+    curEmail:data?.email
   })
 
-  console.log(updateprofile)
+  console.log(data)
   const handleData = (e) =>{
     const nam = e.target.name;
     const val = e.target.value;
@@ -55,16 +55,16 @@ export default function Account() {
             </Typography>
             <Stack spacing={2} direction="row" sx={{ mt: 2 }}>
               <Typography variant="h4">UserName :</Typography>
-              {edit ? <TextField id="filled-basic" name='username' label="Username" variant="filled" onChange={(e) =>handleData(e)}/> : <Typography variant="h4">
+              {edit? <TextField id="filled-basic" name='username' label="Username" variant="filled" onChange={(e) =>handleData(e)}/> : <Typography variant="h4">
                {data?.username}
               </Typography>}
             </Stack><Stack spacing={2} direction="row" sx={{ mt: 2 }}>
               <Typography variant="h4">Email :</Typography>
-              {edit ? <TextField id="filled-basic" name='email' label="Email" variant="filled" onChange={(e) =>handleData(e)}/> : <Typography variant="h4">
+              {edit? <TextField id="filled-basic" name='email' label="Email" variant="filled" onChange={(e) =>handleData(e)}/> : <Typography variant="h4">
                {data?.email}
               </Typography>}
             </Stack>
-            {edit ?  <Button
+            {edit?  <Button
                   variant="contained"
                   sx={{ color: "#000",margin:'20px' }}
                   size="large"

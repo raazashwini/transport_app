@@ -122,6 +122,9 @@ function TravelDetails() {
       setSelected(data);
     }
   };
+  useEffect(()=>{
+    getLogin()
+  },[selected])
 
   return (
     <React.Fragment>
@@ -204,7 +207,7 @@ function TravelDetails() {
                               {...label}
                               icon={<FavoriteBorder />}
                               checkedIcon={<Favorite />}
-                              onClick={(e) => {handleClick(e, row);getLogin()}}
+                              onClick={(e) => handleClick(e, row)}
                             />
                           </StyledTableCell>
                         </StyledTableRow>

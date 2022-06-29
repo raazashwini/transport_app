@@ -44,11 +44,15 @@ function Favoutite() {
     apiService({ url: getfav, method: "get" }).then(
       (result) => {
        setSelected(result)    
-       console.log(result)   
       }
     )
     .catch((error) => alert('login fails: user does not exist') )
   };
+
+ const favData = Object.values(selected.reduce((c,e) =>{
+  if (!c[e.ending_location]) c[e.ending_location] =e;
+  return c;
+ },{}))
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
   const columns = [
     "Mode",
@@ -85,24 +89,24 @@ useEffect(()=>{
                       ))}
                     </TableRow>
                   </TableHead>
-                  {selected?.length ? (
+                  {favData?.length ? (
                     <TableBody>
-                      {selected?.map((row, key) => (
+                      {favData?.map((row, key) => (
                         <StyledTableRow key={key}>
                           <StyledTableCell component="th" scope="row">
                             {row.mode}
                           </StyledTableCell>
                           <StyledTableCell component="th" scope="row">
-                            {row.from_point_name}
+                            {row.starting_location}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            {row.departure_time}
+                            {row.starting_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            {row.to_point_name}
+                            {row.ending_location}
                           </StyledTableCell>
                           <StyledTableCell align="right">
-                            {row.arrival_time}
+                            {row.ending_time}
                           </StyledTableCell>
                           <StyledTableCell align="right">
                             {row.distance}

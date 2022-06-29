@@ -16,6 +16,7 @@ export default function Home() {
     'password':'',
     'username':''
   });
+  console.log(userData)
   const [loginData,setLoginData] =useState({
     'email':'',
     'password':''
@@ -50,7 +51,7 @@ export default function Home() {
     e.preventDefault();
     apiService({ url: Login, method: "post", data: loginData }).then(
       (result) => {
-        // console.log(result)
+        console.log(result)
         setDataNew('login Successful') 
         alert('you are logged successfully');
 
